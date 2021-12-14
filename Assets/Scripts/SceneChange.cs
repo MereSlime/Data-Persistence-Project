@@ -10,8 +10,12 @@ public class SceneChange : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void MainMenu()
+    public void Quit()
     {
-        SceneManager.LoadScene(0);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

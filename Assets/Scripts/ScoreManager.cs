@@ -21,20 +21,41 @@ public class ScoreManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("Score: " + highScore);
+        LoadScore();
     }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public int highScore;
+        public string highScoreName;
+    }
+
+    public void SaveScore()
+    {
+        SaveData data = new SaveData();
+        data.highScore = highScore;
+        data.highScoreName = highScoreName;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void LoadScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            highScore = data.highScore;
+            highScoreName = data.highScoreName;
+        }
+    }
+
 }
 
-/*[System.Serializable]
-class SaveData
-{
-    public int highScore;
-    public int highScoreName;
-}
 
-public void SaveScore()
-{
-    SaveData data = new SaveData();
 
-}
-}*/
